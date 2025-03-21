@@ -6,9 +6,10 @@ const server=http.createServer(app)
 require('dotenv').config()
 //const io=socketIo(server)
 const FRONTEND_URL=process.env.FRONTEND_URL;
+console.log(FRONTEND_URL)
 const io = socketIo(server, {
     cors: {
-      origin: FRONTEND_URL, // Add your frontend URL
+      origin:"http://localhost:5173", // Add your frontend URL
       methods: ["GET", "POST"],
     },
   });
