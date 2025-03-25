@@ -23,26 +23,40 @@ app.get('/data',(req,res)=>{
      
 })
 io.on("connection",(socket)=>{
-    socket.emit("senddata",(data)=>{
+    socket.on("senddata",(data)=>{
         const {name,mail,uid}=data
-        let val=users.find((udata)=>udata.id===uid)
+        //console.log("the data got",data)
+        let val=users.find((udata)=>udata.id==uid)
         if(val)
         {
-            users.push({id:uid,name:name,mail:mail})
+
         }
+        else{
+            users.push({name:name,id:uid,socketid:socket.id})
+        }
+        console.log(users)
 
     })
     io.emit("message",messages)
     io.emit("noofusers",users)
-    socket.emit("count",io.engine.clientsCount)
+    
 socket.on("message",(data)=>{
     messages.push({name:data.name,msg:data.msg})
     console.log(messages)
     //socket.emit("message",messages)
     io.emit("message",messages)
+    console.log(messages)
    
    
    
+})
+socket.on("personmsgd",(data)=>{
+    console.log("message recived is",data)
+    
+    io.to(data.socketId).emit('msgto', {
+        from: data.from,
+        message: data.message,
+      });
 })
 
 
